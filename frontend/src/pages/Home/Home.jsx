@@ -1,22 +1,17 @@
 import { quotes } from "../../app/i18n/quotes";
 import { messages } from "../../app/i18n/messages";
-import { authUser } from "../../app/auth/authUser";
 import { useLanguage } from "../../app/i18n/LanguageContext";
+import { useAuth } from "../../app/auth/AuthContext";
+import { canAccessMetrics } from "../../app/auth/permissions";
 
 export default function Home() {
-  // ✅ Ahora traemos también toggleLanguage
   const { lang, toggleLanguage } = useLanguage();
-
-  // ✅ Usuario mock (mañana será autenticación real)
-  const user = authUser;
+  const { user } = useAuth();
 
   const greetingTemplate = messages[lang].home.greeting;
   const greeting = greetingTemplate.replace("{name}", user.name);
 
-  // Tomamos la lista de frases según idioma
   const list = quotes[lang];
-
-  // Elegimos una frase al azar
   const randomIndex = Math.floor(Math.random() * list.length);
   const quote = list[randomIndex];
 
@@ -41,6 +36,24 @@ export default function Home() {
       >
         {lang === "es" ? "EN" : "ES"}
       </button>
+
+      {/* INDICADOR DE ROL TEMPORAL - SOLO PARA DESARROLLO */}
+      <div
+        style={{
+          position: "fixed",
+          top: "20px",
+          left: "20px",
+          padding: "8px 16px",
+          background: user.role === "owner" ? "#10b981" : "#f59e0b",
+          color: "white",
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontWeight: "600",
+          zIndex: 1000,
+        }}
+      >
+        {user.role === "owner" ? "OWNER" : "STAFF"}
+      </div>
 
       {/* HERO */}
       <header className="home__hero">
@@ -84,6 +97,29 @@ export default function Home() {
             <li className="home__item">Revisar campaña de Instagram</li>
           </ul>
         </section>
+
+        {/* PANEL SOLO VISIBLE PARA OWNER */}
+        {canAccessMetrics(user) && (
+          <section
+            className="home__panel home__panel--metrics"
+            aria-labelledby="metrics-title"
+          >
+            <h2 id="metrics-title" className="home__panel-title">
+              📊 {lang === "es" ? "Métricas (solo Owner)" : "Metrics (Owner only)"}
+            </h2>
+            <ul className="home__list">
+              <li className="home__item">
+                {lang === "es" ? "Clientes activos: 56" : "Active clients: 56"}
+              </li>
+              <li className="home__item">
+                {lang === "es" ? "Tasa de retención: 77%" : "Retention rate: 77%"}
+              </li>
+              <li className="home__item">
+                {lang === "es" ? "Ingresos del mes: $4,230" : "Monthly revenue: $4,230"}
+              </li>
+            </ul>
+          </section>
+        )}
       </main>
     </section>
   );
