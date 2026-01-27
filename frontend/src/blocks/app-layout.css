@@ -1,16 +1,28 @@
 .app-layout {
   min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Sidebar fijo 280px + Main flexible */
   background-image: url("../assets/images/backgrounds/bg-lake-soft.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.app-layout__main {
-  flex:1;
+.app-layout__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+.app-layout__main {
+  flex: 1;
+  overflow-y: auto; /* Scroll solo en el contenido principal */
+}
+
+/* Responsive: En móvil, el sidebar va arriba */
+@media (max-width: 900px) {
+  .app-layout {
+    grid-template-columns: 1fr; /* Una sola columna */
+    grid-template-rows: auto 1fr; /* Sidebar arriba, content abajo */
+  }
+}

@@ -1,6 +1,7 @@
 @import url("./blocks/app-layout.css");
 @import url("./blocks/footer.css");
 @import url("./blocks/home.css");
+@import url("./blocks/sidebar.css");
 
 /* Reset mínimo y consistente */
 *,

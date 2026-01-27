@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <section className="home">
-      {/* TOGGLE TEMPORAL - SOLO PARA PRUEBAS */}
+     {/* TOGGLE TEMPORAL - SOLO PARA PRUEBAS *
       <button
         onClick={toggleLanguage}
         style={{
@@ -35,9 +35,9 @@ export default function Home() {
         }}
       >
         {lang === "es" ? "EN" : "ES"}
-      </button>
+      </button> */}
 
-      {/* INDICADOR DE ROL TEMPORAL - SOLO PARA DESARROLLO */}
+      {/* INDICADOR DE ROL TEMPORAL - SOLO PARA DESARROLLO 
       <div
         style={{
           position: "fixed",
@@ -53,7 +53,7 @@ export default function Home() {
         }}
       >
         {user.role === "owner" ? "OWNER" : "STAFF"}
-      </div>
+      </div> */}
 
       {/* HERO */}
       <header className="home__hero">
