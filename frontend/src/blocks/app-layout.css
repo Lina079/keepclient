@@ -1,8 +1,16 @@
 .app-layout {
   min-height: 100vh;
 
+  display: flex;
+  flex-direction: column;
+
   background-image: url("../assets/images/backgrounds/bg-lake-soft.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.app-layout__main {
+  flex:1;
+}
+
