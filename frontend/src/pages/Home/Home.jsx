@@ -1,26 +1,47 @@
 import { quotes } from "../../app/i18n/quotes";
 import { messages } from "../../app/i18n/messages";
 import { authUser } from "../../app/auth/authUser";
+import { useLanguage } from "../../app/i18n/LanguageContext";
 
 export default function Home() {
-  // 1. Idioma fijo por ahora (luego lo haremos dinámico)
-  const lang = "es";
+  // ✅ Ahora traemos también toggleLanguage
+  const { lang, toggleLanguage } = useLanguage();
 
-  // ✅ hoy es mock centralizado (mañana se reemplaza por auth real)
+  // ✅ Usuario mock (mañana será autenticación real)
   const user = authUser;
 
   const greetingTemplate = messages[lang].home.greeting;
   const greeting = greetingTemplate.replace("{name}", user.name);
 
-  // 2. Tomamos la lista de frases según idioma
+  // Tomamos la lista de frases según idioma
   const list = quotes[lang];
 
-  // 3. Elegimos una frase al azar
+  // Elegimos una frase al azar
   const randomIndex = Math.floor(Math.random() * list.length);
   const quote = list[randomIndex];
 
   return (
     <section className="home">
+      {/* TOGGLE TEMPORAL - SOLO PARA PRUEBAS */}
+      <button
+        onClick={toggleLanguage}
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          padding: "10px 20px",
+          background: "#4a90e2",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontWeight: "bold",
+          zIndex: 1000,
+        }}
+      >
+        {lang === "es" ? "EN" : "ES"}
+      </button>
+
       {/* HERO */}
       <header className="home__hero">
         <h1 className="home__title">{greeting}</h1>
