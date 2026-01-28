@@ -3,6 +3,7 @@
 @import url("./blocks/home.css");
 @import url("./blocks/sidebar.css");
 @import url("./blocks/confirm-dialog.css");
+@import url("./blocks/weather-widget.css");
 
 /* Reset mínimo y consistente */
 *,

@@ -3,17 +3,29 @@ import { messages } from "../../app/i18n/messages";
 import { useLanguage } from "../../app/i18n/LanguageContext";
 import { useAuth } from "../../app/auth/AuthContext";
 import { canAccessMetrics } from "../../app/auth/permissions";
+import { getTimePeriod } from "../../utils/timeGreeting";
+import WeatherWidget from "../../components/WeatherWidget/WeatherWidget";
+import { useNavigate } from "react-router-dom";
+
+console.log("Periodo actual:", getTimePeriod());
+console.log("API key cargada:", import.meta.env.VITE_WEATHER_API_KEY);
 
 export default function Home() {
   const { lang, toggleLanguage } = useLanguage();
   const { user } = useAuth();
 
-  const greetingTemplate = messages[lang].home.greeting;
+  const period = getTimePeriod();
+  const greetingTemplate = messages[lang].home.greeting[period];
   const greeting = greetingTemplate.replace("{name}", user.name);
 
   const list = quotes[lang];
   const randomIndex = Math.floor(Math.random() * list.length);
   const quote = list[randomIndex];
+
+  const navigate = useNavigate();
+  const handleNewClient = () => {
+    navigate("/clients");
+  };
 
   return (
     <section className="home">
@@ -57,8 +69,22 @@ export default function Home() {
 
       {/* HERO */}
       <header className="home__hero">
-        <h1 className="home__title">{greeting}</h1>
-        <p className="home__quote">{quote}</p>
+        <div className="home__hero-text">
+          <h1 className="home__title">{greeting}</h1>
+          <p className="home__quote">{quote}</p>
+        </div>
+  
+        <WeatherWidget />
+
+        {/* BOTÓN NUEVO CLIENTE */}
+        <button 
+          className="home__cta-button"
+          onClick={handleNewClient}
+          aria-label={messages[lang].home.ctaNewClient}
+          >
+            <span className="home__cta-icon">+</span>
+            <span className="home__cta-text">{messages[lang].home.ctaNewClient}</span>
+          </button>
       </header>
 
       {/* CONTENT */}

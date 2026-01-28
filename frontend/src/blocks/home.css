@@ -7,8 +7,28 @@
 
 /* HERO SECTION */
 .home__hero {
-  margin-bottom: 48px;
-  text-align: left;
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 12px;
+  align-items: start;
+}
+
+/* HERO TEXT (nuevo contenedor BEM) */
+.home__hero-text {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.home__hero .weather-widget {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.home__hero .home__cta-button {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .home__title {
@@ -63,17 +83,90 @@
   font-size: 15px;
 }
 
-/* Responsive */
+/* CTA BUTTON (Call To Action) */
+.home__cta-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(253, 160, 133, 0.4);
+  transition: all 0.3s ease;
+  width: 100%; /* Ancho completo */
+  max-width: 320px; /* Máximo ancho */
+}
+
+.home__cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 160, 133, 0.5);
+}
+
+.home__cta-button:active {
+  transform: translateY(0);
+}
+
+.home__cta-icon {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.home__cta-text {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .home {
-    padding: 32px 18px 72px;
+    padding: 80px 18px 72px; /* Aumentado padding-top de 32px a 80px */
+  }
+
+  .home__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
   }
 
   .home__title {
     font-size: 38px;
   }
 
+  home__cta-button {
+    padding: 16px 24px;
+    max-width: 100%;
+  }
+
   .home__content {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  /* ... reglas existentes ... */
+
+  /* BOTÓN CTA EN MÓVIL */
+  .home__cta-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  .home__cta-icon {
+    font-size: 20px;
+  }
+
+  .home__cta-text {
+    font-size: 15px;
   }
 }

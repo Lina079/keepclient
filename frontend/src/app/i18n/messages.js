@@ -1,7 +1,11 @@
 export const messages = {
   es: {
     home: {
-      greeting: "Buenos días, {name}",
+      greeting: {
+        morning: "Buenos días, {name} 🙂",
+        afternoon: "Buenas tardes, {name} 😊",
+        evening: "Buenas noches, {name} ☺️",
+      },
       subtitle: "Hoy será un día maravilloso.",
       agendaTitle: "Agenda del día",
       tasksTitle: "Tareas pendientes",
@@ -10,7 +14,11 @@ export const messages = {
   },
   en: {
     home: {
-      greeting: "Good morning, {name}",
+      greeting: {
+        morning: "Good morning, {name} 🙂",
+        afternoon: "Good afternoon, {name} 😊",
+        evening: "Good evening, {name} ☺️"
+      },
       subtitle: "Today will be a wonderful day.",
       agendaTitle: "Today's agenda",
       tasksTitle: "Pending tasks",
