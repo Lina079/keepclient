@@ -76,20 +76,8 @@
   transition: all 0.2s ease;
 }
 
-.sidebar__company-placeholder:hover {
-  border-color: #4a90e2;
-  transform: scale(1.05);
-}
-
-.sidebar__company-placeholder-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.sidebar__edit-logo {
+/* ÍCONO LÁPIZ SIEMPRE VISIBLE */
+.sidebar__edit-logo-indicator {
   position: absolute;
   bottom: -2px;
   right: -2px;
@@ -104,6 +92,106 @@
   justify-content: center;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar__edit-logo-indicator:hover {
+  background: #f9fafb;
+  border-color: #4a90e2;
+  transform: scale(1.1);
+}
+
+.sidebar__edit-icon-img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.sidebar__edit-logo-indicator:hover .sidebar__edit-icon-img {
+  opacity: 1;
+}
+
+.sidebar__company-placeholder:hover {
+  border-color: #4a90e2;
+  transform: scale(1.05);
+}
+
+.sidebar__company-placeholder-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* MENÚ CONTEXTUAL DEL LOGO */
+.sidebar__logo-menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 10;
+  min-width: 160px;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.sidebar__logo-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.sidebar__logo-menu-item:hover {
+  background: #f3f4f6;
+}
+
+.sidebar__logo-menu-item--delete:hover {
+  background: #fee;
+  color: #dc2626;
+}
+
+.sidebar__logo-menu-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar__logo-menu-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.sidebar__logo-menu-item--delete .sidebar__logo-menu-text {
+  color: #dc2626;
+}
+
+.sidebar__delete-logo:hover {
+  background: #fee;
+  border-color: #ef4444;
+  transform: scale(1.1);
 }
 
 .sidebar__edit-logo:hover {

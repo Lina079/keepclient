@@ -2,6 +2,7 @@
 @import url("./blocks/footer.css");
 @import url("./blocks/home.css");
 @import url("./blocks/sidebar.css");
+@import url("./blocks/confirm-dialog.css");
 
 /* Reset mínimo y consistente */
 *,
