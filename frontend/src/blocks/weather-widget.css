@@ -33,7 +33,7 @@
 
 /* ELEMENT: condición del clima (ej: "Soleado") */
 .weather-widget__condition {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 500;
   color: #4a4a4a;
   margin: 0;
@@ -41,7 +41,7 @@
 
 /* ELEMENT: ubicación (ciudad) */
 .weather-widget__location {
-  font-size: 14px;
+  font-size: 18px;
   color: #666666;
   margin: 0;
 }
@@ -50,7 +50,7 @@
 .weather-widget__message {
   text-align: center;
   color: #999999;
-  font-size: 14px;
+  font-size: 18px;
   margin: 0;
 }
 

@@ -173,13 +173,13 @@
 }
 
 .sidebar__logo-menu-icon {
-  font-size: 18px;
+  font-size: 20px;
   width: 24px;
   text-align: center;
 }
 
 .sidebar__logo-menu-text {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   color: #374151;
 }
@@ -275,7 +275,7 @@
   border-radius: 10px;
   text-decoration: none;
   color: #52606d;
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 500;
   transition: all 0.2s ease;
   cursor: pointer;

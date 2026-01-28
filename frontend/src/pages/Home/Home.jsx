@@ -2,10 +2,13 @@ import { quotes } from "../../app/i18n/quotes";
 import { messages } from "../../app/i18n/messages";
 import { useLanguage } from "../../app/i18n/LanguageContext";
 import { useAuth } from "../../app/auth/AuthContext";
-import { canAccessMetrics } from "../../app/auth/permissions";
 import { getTimePeriod } from "../../utils/timeGreeting";
 import WeatherWidget from "../../components/WeatherWidget/WeatherWidget";
 import { useNavigate } from "react-router-dom";
+// Imágenes de placeholders
+import agendaPlaceholder from "../../assets/images/placeholders/agenda.png";
+import startTasksPlaceholder from "../../assets/images/placeholders/start-tasks.png";
+import noTasksPlaceholder from "../../assets/images/placeholders/no-tasks.png";
 
 console.log("Periodo actual:", getTimePeriod());
 console.log("API key cargada:", import.meta.env.VITE_WEATHER_API_KEY);
@@ -29,44 +32,6 @@ export default function Home() {
 
   return (
     <section className="home">
-     {/* TOGGLE TEMPORAL - SOLO PARA PRUEBAS *
-      <button
-        onClick={toggleLanguage}
-        style={{
-          position: "fixed",
-          top: "20px",
-          right: "20px",
-          padding: "10px 20px",
-          background: "#4a90e2",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontWeight: "bold",
-          zIndex: 1000,
-        }}
-      >
-        {lang === "es" ? "EN" : "ES"}
-      </button> */}
-
-      {/* INDICADOR DE ROL TEMPORAL - SOLO PARA DESARROLLO 
-      <div
-        style={{
-          position: "fixed",
-          top: "20px",
-          left: "20px",
-          padding: "8px 16px",
-          background: user.role === "owner" ? "#10b981" : "#f59e0b",
-          color: "white",
-          borderRadius: "8px",
-          fontSize: "14px",
-          fontWeight: "600",
-          zIndex: 1000,
-        }}
-      >
-        {user.role === "owner" ? "OWNER" : "STAFF"}
-      </div> */}
-
       {/* HERO */}
       <header className="home__hero">
         <div className="home__hero-text">
@@ -93,59 +58,41 @@ export default function Home() {
           className="home__panel home__panel--agenda"
           aria-labelledby="agenda-title"
         >
-          <h2 id="agenda-title" className="home__panel-title">
-            {messages[lang].home.agendaTitle}
-          </h2>
+        <h2 id="agenda-title" className="home__panel-title">
+          {messages[lang].home.agendaTitle}
+        </h2>
+        {/* ESTADO VACÍO */}
+      <div className="home__panel-empty">
+      <img 
+      src={agendaPlaceholder} 
+      alt="Agenda placeholder"
+      className="home__panel-empty-image"
+      />
+      <p className="home__panel-empty-text">
+      {messages[lang].home.agendaEmpty}
+      </p>
+    </div>
+  </section>
+  <section
+  className="home__panel home__panel--tasks"
+  aria-labelledby="tasks-title"
+>
+  <h2 id="tasks-title" className="home__panel-title">
+    {messages[lang].home.tasksTitle}
+  </h2>
 
-          <ul className="home__list">
-            <li className="home__item">
-              10:00 - Semipermanente Sencillo con base nivelador • Marí Carmen
-            </li>
-            <li className="home__item">11:00 - Pedicura • Juan Pérez</li>
-            <li className="home__item">
-              16:00 - The Beauty Ritual Completo • Ana Gómez
-            </li>
-          </ul>
-        </section>
-
-        <section
-          className="home__panel home__panel--tasks"
-          aria-labelledby="tasks-title"
-        >
-          <h2 id="tasks-title" className="home__panel-title">
-            {messages[lang].home.tasksTitle}
-          </h2>
-          <ul className="home__list">
-            <li className="home__item">Escribir a Ana: 45 días sin volver</li>
-            <li className="home__item">
-              Confirmar cita de mañana (2 pendientes)
-            </li>
-            <li className="home__item">Revisar campaña de Instagram</li>
-          </ul>
-        </section>
-
-        {/* PANEL SOLO VISIBLE PARA OWNER */}
-        {canAccessMetrics(user) && (
-          <section
-            className="home__panel home__panel--metrics"
-            aria-labelledby="metrics-title"
-          >
-            <h2 id="metrics-title" className="home__panel-title">
-              📊 {lang === "es" ? "Métricas (solo Owner)" : "Metrics (Owner only)"}
-            </h2>
-            <ul className="home__list">
-              <li className="home__item">
-                {lang === "es" ? "Clientes activos: 56" : "Active clients: 56"}
-              </li>
-              <li className="home__item">
-                {lang === "es" ? "Tasa de retención: 77%" : "Retention rate: 77%"}
-              </li>
-              <li className="home__item">
-                {lang === "es" ? "Ingresos del mes: $4,230" : "Monthly revenue: $4,230"}
-              </li>
-            </ul>
-          </section>
-        )}
+  {/* ESTADO VACÍO */}
+  <div className="home__panel-empty">
+    <img 
+      src={startTasksPlaceholder} 
+      alt="Start tasks placeholder"
+      className="home__panel-empty-image"
+    />
+    <p className="home__panel-empty-text">
+      {messages[lang].home.tasksEmpty}
+    </p>
+      </div>
+    </section>
       </main>
     </section>
   );

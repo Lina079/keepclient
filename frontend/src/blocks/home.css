@@ -1,7 +1,7 @@
 /* HOME PAGE */
 .home {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1400px;
+  margin: 0 auto 0 40px;
   padding: 40px 24px 80px;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .home__quote {
-  font-size: 18px;
+  font-size: 22px;
   color: #52606d;
   margin: 0;
   font-weight: 400;
@@ -57,9 +57,12 @@
 .home__panel {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 16px;
-  padding: 24px;
+  padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   backdrop-filter: blur(10px);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .home__panel-title {
@@ -119,10 +122,36 @@
 }
 
 .home__cta-text {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 }
+/* ESTADO VACÍO DE PANELES */
+.home__panel-empty {
+  flex: 1; /* Ocupa el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 20px;
+}
 
+.home__panel-empty-image {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+}
+
+.home__panel-empty-text {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #52606d;
+  text-align: center;
+  max-width: 320px;
+  margin: 0;
+}
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
@@ -168,5 +197,20 @@
 
   .home__cta-text {
     font-size: 15px;
+  }
+
+  /* ESTADO VACÍO EN MÓVIL */
+  .home__panel-empty {
+    padding: 30px 16px;
+    gap: 20px;
+  }
+
+  .home__panel-empty-image {
+    max-width: 220px;
+  }
+
+  .home__panel-empty-text {
+    font-size: 15px;
+    max-width: 280px;
   }
 }
