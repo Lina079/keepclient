@@ -158,9 +158,29 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  padding-right: 8px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.home__task-list::-webkit-scrollbar {
+  width: 8px;
+}
+.home__task-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.home__task-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.home__task-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .home__task-item {
@@ -227,6 +247,35 @@
   background: rgba(200, 230, 201, 0.3);
 }
 
+/* MENSAJE CELEBRATORIO */
+.home__task-celebration {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(200, 230, 201, 0.4), rgba(165, 214, 167, 0.3));
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.home__task-celebration-icon {
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.home__task-celebration-text {
+  flex: 1;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.5;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .home {
@@ -244,7 +293,7 @@
     font-size: 38px;
   }
 
-  home__cta-button {
+  .home__cta-button {
     padding: 16px 24px;
     max-width: 100%;
   }
@@ -252,10 +301,6 @@
   .home__content {
     grid-template-columns: 1fr;
   }
-}
-
-@media (max-width: 900px) {
-  /* ... reglas existentes ... */
 
   /* BOTÓN CTA EN MÓVIL */
   .home__cta-button {
@@ -267,6 +312,16 @@
 
   .home__cta-icon {
     font-size: 20px;
+  }
+
+  .home__task-celebration {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .home__task-celebration-icon {
+    width: 120px;
+    max-width: 100%;
   }
 
   .home__cta-text {

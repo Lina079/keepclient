@@ -59,7 +59,21 @@ export default function Home() {
         : "Send a message to schedule his next appointment.",
       completed: false,
       priority: "low"
-    }
+    },
+   {
+      id: "task-5",
+      clientName: "María Sánchez",
+      description: "Tarea de prueba 5",
+      completed: false,
+      priority: "low"
+    },
+    {
+      id: "task-6",
+      clientName: "Carlos Ruiz",
+      description: "Tarea de prueba 6",
+      completed: false,
+      priority: "low"
+    }, 
   ];
 });
 
@@ -141,54 +155,59 @@ export default function Home() {
             {messages[lang].home.tasksTitle}
           </h2>
           
-          {tasks.length === 0 ? (
-            //Caso 1: No hay tareas
-            <div className="home__panel-empty">
-              <img 
-                src={startTasksPlaceholder}
-                alt="Start tasks placeholder"
-                className="home__panel-empty-image"
-              />
-              <p className="home__panel-empty-text">
-                {messages[lang].home.tasksEmpty}
-              </p>
+        {tasks.length === 0 ? (
+  // CASO 1: No hay tareas creadas
+  <div className="home__panel-empty">
+    <img 
+      src={startTasksPlaceholder} 
+      alt="Start tasks placeholder"
+      className="home__panel-empty-image"
+    />
+    <p className="home__panel-empty-text">
+      {messages[lang].home.tasksEmpty}
+    </p>
+  </div>
+) : (
+  // CASO 2: Hay tareas (mostrar lista siempre)
+  <>
+    {/* Mensaje celebratorio si todas están completadas */}
+    {tasks.every(task => task.completed) && (
+      <div className="home__task-celebration">
+        <img 
+          src={noTasksPlaceholder} 
+          alt="All tasks completed"
+          className="home__task-celebration-icon"
+        />
+        <p className="home__task-celebration-text">
+          {messages[lang].home.tasksCompleted}
+        </p>
+      </div>
+    )}
+
+    {/* Lista de tareas (siempre visible) */}
+    <ul className="home__task-list">
+      {tasks.map((task) => (
+        <li key={task.id} className="home__task-item">
+          <label className="home__task-label">
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => handleToggleTask(task.id)}
+              className="home__task-checkbox"
+              aria-label={`Marcar como completada: ${task.clientName}`}
+            />
+            <div className="home__task-content">
+              <span className="home__task-client">{task.clientName}</span>
+              <span className="home__task-description">{task.description}</span>
             </div>
-          ) : tasks.every(task => task.completed) ? (
-            //Caso 2: Todas las tareas completadas
-            <div className="home__panel-empty">
-              <img 
-                src={noTasksPlaceholder}
-                alt="All tasks completed"
-                className="home__panel-empty-image"
-              />
-              <p className="home__panel-empty-text">
-                {messages[lang].home.tasksAllCompleted}
-              </p>
-            </div>
-          ) : (
-            //Caso 3: Mostrar lista de tareas
-            <ul className="home__task-list">
-              {tasks.map((task) => (
-                <li key={task.id} className="home__task-item">
-                  <label className="home__task-label">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() => handleToggleTask(task.id)}
-                      className="home__task-checkbox"
-                      aria-label={`Marcar como completada: ${task.clientName}`}
-                    />
-                    <div className="home__task-content">
-                      <span className="home__task-client">{task.clientName}</span>
-                      <span className="home__task-description">{task.description}</span>
-                    </div>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </main>
-    </section>
+          </label>
+        </li>
+      ))}
+    </ul>
+  </>
+)}  
+ </section>
+  </main>
+</section>
   );
 }
