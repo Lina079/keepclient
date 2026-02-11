@@ -4,6 +4,7 @@
 @import url("./blocks/sidebar.css");
 @import url("./blocks/confirm-dialog.css");
 @import url("./blocks/weather-widget.css");
+@import url("./blocks/clients.css");
 
 /* Reset mínimo y consistente */
 *,
