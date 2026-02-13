@@ -1,10 +1,32 @@
 import { useState } from "react";
 import { useLanguage } from "../../app/i18n/LanguageContext";
 import { useAuth } from "../../app/auth/AuthContext";
+import ClientModal from "../../components/ClientModal/ClientModal";
+
 
 export default function Clients() {
   const { lang } = useLanguage();
   const { user } = useAuth();
+
+// funciones de validación
+const validatePhone = (value) => {
+  //permitir: números, espacios, guiones, paréntesis y el símbolo +
+  return value.replace(/[^\d\s\-+()]/g, '');
+};
+
+const validateName = (value) => {
+  //permitir: letras, espacios, acentos, ñ, apóstrofes
+  return value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+};
+
+const validateEmail = (email) => {
+  if (!email) return true; // Permitir campo vacío
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// Estado del cliente seleccionado para el modal
+const [selectedClient, setSelectedClient] = useState(null);
 
 // CLIENTES MOCK (temporal - luego vendrán de backend)
   const [clients, setClients] = useState([
@@ -93,11 +115,239 @@ export default function Clients() {
 
  const handleInputChange = (e) => {
   const { name, value } = e.target;
+
+  let sanitizedValue = value;
+  if (name === "telefono") {
+    sanitizedValue = validatePhone(value);
+  } else if (name === "nombre") {
+    sanitizedValue = validateName(value);
+  }
   setFormData(prev => ({
     ...prev,
-    [name]: value
+    [name]: sanitizedValue
   }));
  };
+
+ //Handler: abrir modal al hacer click en fila
+const handleRowClick = (client) => {
+setSelectedClient(client);
+};
+
+//Handler: cerrar modal
+const handleCloseModal = () => {
+setSelectedClient(null);
+};
+
+//Handler: guardar nueva visita desde el modal
+const handleSaveVisit = (visitData) => {
+  console.log("Nueva visita registrada:", visitData);
+
+// 1. Actualizar el historial del cliente
+ setClients(prev => prev.map(client => {
+  if (client.id === visitData.clientId) {
+    //Calcuralr nuevo estado(si es nuevo y ya tiene visita, pasa a ser recurrente)
+    const nuevoEstado = client.estado === "Nuevo" ? "Recurrente" : client.estado;
+    return {
+      ...client,
+      ultimaVisita: {
+        fecha: visitData.fecha,
+        servicio: visitData.servicio,
+        atendidoPor: visitData.atendidoPor,
+        notas: visitData.notas
+      },
+      diasDesdeUltimaVisita: 0, // Al registrar una nueva visita, se resetea a 0
+      estado: nuevoEstado
+    };
+  }
+  return client;
+  }));
+
+// 2. Crear la tarea automáticament
+if (visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0) {
+  const fechaTarea = new Date();
+  fechaTarea.setDate(fechaTarea.getDate() + parseInt(visitData.seguimientoDias));
+
+  const tarea = {
+    id: `task-${Date.now()}`,
+    clientId: visitData.clientId,
+    clienteNombre: selectedClient.nombre,
+    descripcion: visitData.tareaDescripcion ||
+     (lang === "es"
+       ? `Contactar a ${selectedClient.nombre}` 
+       : `Contact ${selectedClient.nombre}`),
+    fechaLimite: fechaTarea.toISOString().split('T')[0],
+    completada: false,
+    creadaEn: new Date().toISOString()
+  };
+
+  console.log("✅Tarea creada:", tarea);
+}
+// 3. Mostrar mensaje de éxito
+alert(lang === "es"
+  ? `✅ Visita registrada correctament\n${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0 
+   ? `📋 Tarea creada para dentro de ${visitData.seguimientoDias} días` 
+   : ''}`
+  : `✅ Visit registered successfully\n${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0 
+   ? `📋 Task created for ${visitData.seguimientoDias} days from now` 
+   : ''}`);
+
+   // 4. Cerrar el modal
+   handleCloseModal();
+  };
+
+// Handler: Eliminar cliente
+const handleDeleteClient = (clientId) => {
+  //aquí usaremos el ConfirmDialog (próximo paso)
+  const confirmed = window.confirm(
+    lang === "es"
+      ? "¿Estás seguro de que quieres eliminar este cliente? Esta acción no se puede deshacer."
+      : "Are you sure you want to delete this client? This action cannot be undone."
+  );
+  if (confirmed) {
+    // Aquí iría la lógica para eliminar el cliente del backend
+    setClients(prev => prev.filter(c => c.id !== clientId));
+    handleCloseModal();
+    alert(lang === "es"
+      ? "Cliente eliminado correctamente"
+      : "Client deleted successfully");
+  }
+  };
+  // Handler: Registrar primera visita (cliente nuevo)
+  const handleSubmitFirstVisit = () => {
+    // Validar campos obligatorios
+    if (!formData.nombre.trim()) {
+      alert(lang === "es"
+        ? "⚠️ El nombre del cliente es obligatorio."
+        : "⚠️ Client name is required."
+      );
+      return;
+    }
+    if (!formData.telefono.trim()) {
+      alert(lang === "es"
+        ? "⚠️ El teléfono del cliente es obligatorio."
+        : "⚠️ Client phone number is required."
+      );
+      return; 
+    }
+
+    //Validar formato de teléfono (mínimo 9 dígitos)
+    const phoneDigits = formData.telefono.replace(/\D/g, '');
+    if (phoneDigits.length < 9) {
+      alert(lang === "es"
+        ? "⚠️ El teléfono debe contener al menos 9 dígitos."
+        : "⚠️ Phone number must contain at least 9 digits."
+      );
+      return;
+    }
+
+    // Validar formato de email (si se ingresó)
+    if (formData.email && !validateEmail(formData.email)) {
+      alert(lang === "es"
+        ? "⚠️ El formato del email es inválido."
+        : "⚠️ Invalid email format."
+      );
+      return;
+     }
+     if (!formData.servicio.trim()) {
+      alert(lang === "es"
+        ? "⚠️ El servicio realizado es obligatorio."
+        : "⚠️ Service performed is required."
+      );
+      return;
+     }
+
+     if (!formData.atendidoPor) {
+      alert(lang === "es"
+        ? "⚠️ Debes seleccionar quién atendió al cliente."
+        : "⚠️ You must select who attended the client."
+      );
+      return;
+     }
+
+     // Crear nuevo cliente
+     const nuevoCliente = {
+      id: `client-${Date.now()}`,
+      nombre: formData.nombre.trim(),
+      telefono: formData.telefono.trim(),
+      email: formData.email.trim() || null,
+      avatar: null,
+      comoConocio: formData.comoConocio || "No especificado",
+      ultimaVisita: {
+        fecha: new Date().toISOString().split('T')[0],
+        servicio: formData.servicio.trim(),
+        atendidoPor: formData.atendidoPor,
+        notas: formData.notas.trim()
+      },
+      diasDesdeUltimaVisita: 0,
+      estado: "Nuevo",
+      creadoEn: new Date().toISOString().split('T')[0]
+     };
+
+    // Agregar cliente a la lista
+    setClients(prev => [nuevoCliente, ...prev]);
+
+    // Crear tarea de seguimiento si se indicó
+    if (formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0) {
+      const fechaTarea = new Date();
+      fechaTarea.setDate(fechaTarea.getDate() + parseInt(formData.seguimientoDias));
+
+      const tarea = {
+        id: `task-${Date.now()}`,
+        clientId: nuevoCliente.id,
+         clienteNombre: nuevoCliente.nombre,
+         descripcion: formData.tareaDescripcion.trim() ||
+          (lang === "es"
+            ? `Contactar a ${nuevoCliente.nombre}` 
+            : `Contact ${nuevoCliente.nombre}`),
+         fechaLimite: fechaTarea.toISOString().split('T')[0],
+         completada: false,
+         creadaEn: new Date().toISOString()
+      };
+
+      console.log("✅Tarea creada:", tarea);
+     }
+
+     // Mostrar mensaje de éxito
+     alert(lang === "es"
+      ? `✅ Cliente registrado correctamente\n${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0 
+        ? `📋 Tarea creada para dentro de ${formData.seguimientoDias} días` 
+        : ''}`
+      : `✅ Client registered successfully\n${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0 
+        ? `📋 Task created for ${formData.seguimientoDias} days from now` 
+        : ''}`
+     );
+
+      // Resetear formulario
+      setFormData({
+        nombre: "", 
+        telefono: "",
+        email: "",
+        comoConocio: "",
+        servicio: "",
+        atendidoPor: "",
+        seguimientoDias: "15",
+        tareaDescripcion: "",
+        notas: "",
+        busqueda: ""
+      });
+    };
+  
+    // Handler: Cancelar formulario
+    const handleCancel = () => {
+      setFormData({
+        nombre: "", 
+        telefono: "",
+        email: "",
+        comoConocio: "",
+        servicio: "",
+        atendidoPor: "",
+        seguimientoDias: "15",
+        tareaDescripcion: "",
+        notas: "",
+        busqueda: ""
+      });
+    };
+
   return (
     <section className="clients">
     <header className="clients__header">
@@ -131,6 +381,19 @@ export default function Clients() {
           value={formData.telefono}
           onChange={handleInputChange}
           placeholder={lang === "es" ? "Teléfono" : "Phone"}
+          className="clients__quick-input"
+        />
+      </div>
+      {/* FILA 1B: Email (opcional) */}
+      <div className="clients__quick-form-row">
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          placeholder={lang === "es" 
+            ? "Email (opcional)" 
+            : "Email (optional)"}
           className="clients__quick-input"
         />
       </div>
@@ -241,10 +504,20 @@ export default function Clients() {
 
       {/* BOTONES */}
       <div className="clients__quick-form-actions">
-        <button className="clients__quick-button clients__quick-button--primary">
-          {lang === "es" ? "Registrar visita" : "Register visit"}
+        <button 
+        className="clients__quick-button clients__quick-button--primary"
+        onClick={handleSubmitFirstVisit}
+        type="button">
+
+          {lang === "es"
+           ? "Registrar visita" 
+           : "Register visit"
+           }
         </button>
-        <button className="clients__quick-button clients__quick-button--secondary">
+        <button 
+        className="clients__quick-button clients__quick-button--secondary"
+        onClick={handleCancel}
+        type="button">
           {lang === "es" ? "Cancelar" : "Cancel"}
         </button>
       </div>
@@ -279,7 +552,12 @@ export default function Clients() {
           </thead>
           <tbody className="clients__table-body">
             {clients.map((client) => (
-              <tr key={client.id} className="clients__table-row">
+              <tr 
+              key={client.id} 
+              className="clients__table-row"
+              onClick={() => handleRowClick(client)}
+              style={{ cursor: "pointer" }
+            }> 
                 <td className="clients__table-cell clients__table-cell--name">
                   <div className="clients__client-info">
                     <div className="clients__client-avatar">
@@ -339,7 +617,15 @@ export default function Clients() {
         </div>
       </div>
     </main>
+
+    {/* MODAL DE DETALLE DEL CLIENTE */}
+    <ClientModal
+      isOpen={!!selectedClient}
+      client={selectedClient}
+      onClose={handleCloseModal}
+      onSaveVisit={handleSaveVisit}
+      onDeleteClient={handleDeleteClient}
+    />
   </section>
   );
 }
-
