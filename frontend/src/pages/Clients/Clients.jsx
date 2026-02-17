@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLanguage } from "../../app/i18n/LanguageContext";
 import { useAuth } from "../../app/auth/AuthContext";
 import ClientModal from "../../components/ClientModal/ClientModal";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 
 export default function Clients() {
@@ -27,6 +28,12 @@ const validateEmail = (email) => {
 
 // Estado del cliente seleccionado para el modal
 const [selectedClient, setSelectedClient] = useState(null);
+const [paginaActual, setPaginaActual] = useState(1);
+const [confirmDialog, setConfirmDialog] = useState({
+  isOpen: false,
+  clientId: null
+});
+const CLIENTES_POR_PAGINA = 10;
 
 // CLIENTES MOCK (temporal - luego vendrán de backend)
   const [clients, setClients] = useState([
@@ -113,9 +120,9 @@ const [selectedClient, setSelectedClient] = useState(null);
     busqueda: ""
  });
 
+ // Handles
  const handleInputChange = (e) => {
   const { name, value } = e.target;
-
   let sanitizedValue = value;
   if (name === "telefono") {
     sanitizedValue = validatePhone(value);
@@ -127,6 +134,11 @@ const [selectedClient, setSelectedClient] = useState(null);
     [name]: sanitizedValue
   }));
  };
+
+ const handleBusquedaChange = (e) => {
+    handleInputChange(e); 
+    setPaginaActual(1);
+    };
 
  //Handler: abrir modal al hacer click en fila
 const handleRowClick = (client) => {
@@ -197,20 +209,26 @@ alert(lang === "es"
 
 // Handler: Eliminar cliente
 const handleDeleteClient = (clientId) => {
-  //aquí usaremos el ConfirmDialog (próximo paso)
-  const confirmed = window.confirm(
-    lang === "es"
-      ? "¿Estás seguro de que quieres eliminar este cliente? Esta acción no se puede deshacer."
-      : "Are you sure you want to delete this client? This action cannot be undone."
-  );
-  if (confirmed) {
-    // Aquí iría la lógica para eliminar el cliente del backend
-    setClients(prev => prev.filter(c => c.id !== clientId));
+  setConfirmDialog({
+    isOpen: true,
+    clienteId:clientId
+  });
+};
+  
+  const handleConfirmDelete = () => {
+    setClients(prev => prev.filter(c => c.id !== confirmDialog.clienteId));
+    setConfirmDialog({
+      isOpen: false,
+      clientId: null
+    });
     handleCloseModal();
-    alert(lang === "es"
-      ? "Cliente eliminado correctamente"
-      : "Client deleted successfully");
-  }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialog({
+      isOpen: false,
+      clientId: null
+    });
   };
   // Handler: Registrar primera visita (cliente nuevo)
   const handleSubmitFirstVisit = () => {
@@ -239,7 +257,6 @@ const handleDeleteClient = (clientId) => {
       );
       return;
     }
-
     // Validar formato de email (si se ingresó)
     if (formData.email && !validateEmail(formData.email)) {
       alert(lang === "es"
@@ -255,7 +272,6 @@ const handleDeleteClient = (clientId) => {
       );
       return;
      }
-
      if (!formData.atendidoPor) {
       alert(lang === "es"
         ? "⚠️ Debes seleccionar quién atendió al cliente."
@@ -361,8 +377,29 @@ const handleDeleteClient = (clientId) => {
     const nombre = normalizar(client.nombre);
     const telefono = client.telefono.replace(/\s/g, "");
 
-    return (nombre.includes(busqueda) || telefono.includes(busqueda));
+    return nombre.includes(busqueda) || telefono.includes(busqueda);
   });
+
+  // Paginación
+  const totalPaginas = Math.ceil(clientesFiltrados.length / CLIENTES_POR_PAGINA);
+  const indiceInicio = (paginaActual -1) * CLIENTES_POR_PAGINA;
+  const indiceFin = indiceInicio + CLIENTES_POR_PAGINA;
+  const clientesPaginados = clientesFiltrados.slice(indiceInicio, indiceFin);
+
+  // Handlers de paginación
+  const handlePaginaAnterior = () => {
+    if (paginaActual > 1) 
+      setPaginaActual(prev => prev - 1);
+    };
+
+  const handlePaginaSiguiente = () => {
+    if (paginaActual < totalPaginas) 
+      setPaginaActual(prev => prev + 1);
+    };
+
+    const handlePaginaClick = (pagina) => {
+      setPaginaActual(pagina);
+    };
 
   return (
     <section className="clients">
@@ -550,7 +587,7 @@ const handleDeleteClient = (clientId) => {
               type="text"
               name="busqueda"
               value={formData.busqueda}
-              onChange={handleInputChange}
+              onChange={handleBusquedaChange}
               placeholder={lang === "es" ? "Buscar cliente por nombre o teléfono" : "Search client by name or phone"}
               className="clients__search-input"
             />
@@ -576,7 +613,7 @@ const handleDeleteClient = (clientId) => {
                 }
               </td>
             </tr>
-          ) : clientesFiltrados.map((client) => (
+          ) : clientesPaginados.map((client) => (
               <tr 
               key={client.id} 
               className="clients__table-row"
@@ -616,28 +653,35 @@ const handleDeleteClient = (clientId) => {
        {/* PAGINACIÓN */}
         <div className="clients__pagination">
           <span className="clients__pagination-info">
-            {lang === "es" 
-            ? `${clientesFiltrados.length} cliente${clientesFiltrados.length !== 1 ? 's' : ''} encontrado${clientesFiltrados.length !== 1 ? 's' : ''}`
-            : `${clientesFiltrados.length} client${clientesFiltrados.length !== 1 ? 's' : ''} found`}
+            {clientesFiltrados.length === 0 
+            ? (lang === "es" ? "0 clientes encontrados" : "0 clients found")
+            : lang === "es"
+              ? `${indiceInicio + 1}-${Math.min(indiceFin, clientesFiltrados.length)} de ${clientesFiltrados.length} cliente${clientesFiltrados.length !== 1 ? 's' : ''}`
+              : `${indiceInicio + 1}-${Math.min(indiceFin, clientesFiltrados.length)} of ${clientesFiltrados.length} client${clientesFiltrados.length !== 1 ? 's' : ''}`
+            }
           </span>
           <div className="clients__pagination-controls">
-            <button className="clients__pagination-button clients__pagination-button--disabled" disabled>
+            <button 
+            className="clients__pagination-button clients__pagination-button--disabled"
+            onClick={handlePaginaAnterior} 
+            disabled={paginaActual === 1}>
               ‹
             </button>
-            <button className="clients__pagination-button clients__pagination-button--active">
-              1
-            </button>
-            <button className="clients__pagination-button">
-              2
-            </button>
-            <button className="clients__pagination-button">
-              3
-            </button>
-            <span className="clients__pagination-dots">...</span>
-            <button className="clients__pagination-button">
-              6
-            </button>
-            <button className="clients__pagination-button">
+            {Array.from({ length: totalPaginas}, (_, i) => i + 1).map(pagina => (
+              <button
+                key={pagina}
+                className={`clients__pagination-button ${pagina === paginaActual ? 'clients__pagination-button--active' : ''}`}
+                onClick={() => handlePaginaClick(pagina)}
+              >
+                {pagina}
+              </button>
+            ))}
+
+            <button
+             className={`clients__pagination-button ${paginaActual === totalPaginas ? 'clients__pagination-button--disbled' : ''}`}
+             onClick={handlePaginaSiguiente}
+             disabled={paginaActual === totalPaginas || totalPaginas === 0}
+             >
               ›
             </button>
           </div>
@@ -652,6 +696,19 @@ const handleDeleteClient = (clientId) => {
       onClose={handleCloseModal}
       onSaveVisit={handleSaveVisit}
       onDeleteClient={handleDeleteClient}
+    />
+    {/* DIALOGO DE CONFIRMACION PARA ELIMINAR CLIENTE */}
+    <ConfirmDialog
+      isOpen={confirmDialog.isOpen}
+      title={lang === "es" ? "¿Eliminar cliente?" : "Delete client?"}
+      message={lang === "es" 
+        ? "¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer." 
+        : "Are you sure you want to delete this client? This action cannot be undone."}
+    confirmText={lang === "es" ? "Eliminar" : "Delete"}
+    cancelText={lang === "es" ? "Cancelar" : "Cancel"}
+    confirmVariant="danger"
+    onConfirm={handleConfirmDelete}
+    onCancel={handleCancelDelete}
     />
   </section>
   );

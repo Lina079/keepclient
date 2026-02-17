@@ -312,7 +312,7 @@ export default function ClientModal({ isOpen, client, onClose, onSaveVisit, onDe
           </section>
 
           {/* SECCIÓN 4: ACCIONES (SOLO OWNER) */}
-          {user.role === "Owner" && (
+          {user.role === "owner" && (
             <section className="client-modal__section client-modal__section--actions">
               <div className="client-modal__actions">
                 <button className="client-modal__action-button client-modal__action-button--edit">
