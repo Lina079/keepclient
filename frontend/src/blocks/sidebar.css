@@ -229,7 +229,7 @@
 }
 
 .sidebar__company-name-placeholder-text {
-  font-size: 14px;
+  font-size: 15px;
   color: #9ca3af;
   font-weight: 500;
 }
@@ -275,7 +275,7 @@
   border-radius: 10px;
   text-decoration: none;
   color: #52606d;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 500;
   transition: all 0.2s ease;
   cursor: pointer;

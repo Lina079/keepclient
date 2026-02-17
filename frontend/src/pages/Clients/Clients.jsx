@@ -348,6 +348,22 @@ const handleDeleteClient = (clientId) => {
       });
     };
 
+  // Filtrado en tiempo real
+  const clientesFiltrados = clients.filter(client => {
+    if (!formData.busqueda.trim()) return true;
+
+    const normalizar = (str) => str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""); // Eliminar acentos
+
+    const busqueda = normalizar(formData.busqueda);
+    const nombre = normalizar(client.nombre);
+    const telefono = client.telefono.replace(/\s/g, "");
+
+    return (nombre.includes(busqueda) || telefono.includes(busqueda));
+  });
+
   return (
     <section className="clients">
     <header className="clients__header">
@@ -551,7 +567,16 @@ const handleDeleteClient = (clientId) => {
             </tr>
           </thead>
           <tbody className="clients__table-body">
-            {clients.map((client) => (
+          {clientesFiltrados.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="clients__table-empty">
+                {lang === "es" 
+                  ? "No se encontraron clientes."
+                  : "No clients found."
+                }
+              </td>
+            </tr>
+          ) : clientesFiltrados.map((client) => (
               <tr 
               key={client.id} 
               className="clients__table-row"
@@ -591,7 +616,9 @@ const handleDeleteClient = (clientId) => {
        {/* PAGINACIÓN */}
         <div className="clients__pagination">
           <span className="clients__pagination-info">
-            {lang === "es" ? "1-4 de 4 clientes" : "1-4 of 4 clients"}
+            {lang === "es" 
+            ? `${clientesFiltrados.length} cliente${clientesFiltrados.length !== 1 ? 's' : ''} encontrado${clientesFiltrados.length !== 1 ? 's' : ''}`
+            : `${clientesFiltrados.length} client${clientesFiltrados.length !== 1 ? 's' : ''} found`}
           </span>
           <div className="clients__pagination-controls">
             <button className="clients__pagination-button clients__pagination-button--disabled" disabled>
