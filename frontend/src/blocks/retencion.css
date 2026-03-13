@@ -1,0 +1,357 @@
+/* ============================================
+   RETENTION - Página de análisis de retención
+   ============================================ */
+
+.retention {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.retention__header {
+  margin-bottom: 32px;
+}
+
+.retention__title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2933;
+  margin: 0;
+}
+
+/* CONTENT */
+.retention__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ============================================
+   ANÁLISIS AUTOMÁTICO
+   ============================================ */
+
+.retention__analysis {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.retention__analysis-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2933;
+  margin: 0 0 16px;
+}
+
+.retention__analysis-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.retention__analysis-message {
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  border-left: 4px solid;
+}
+
+/* Variantes de mensaje */
+.retention__analysis-message--success {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.retention__analysis-message--info {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.retention__analysis-message--warning {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+/* ============================================
+   KPIs PRINCIPALES
+   ============================================ */
+
+.retention__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.retention__kpi-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retention__kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.retention__kpi-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+
+.retention__kpi-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.retention__kpi-label {
+  font-size: 14px;
+  color: #52606d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.retention__kpi-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2933;
+  line-height: 1;
+}
+
+.retention__kpi-percent {
+  font-size: 16px;
+  color: #52606d;
+  font-weight: 500;
+}
+
+/* ============================================
+   TÍTULO DE SECCIÓN COMPARTIDO
+   ============================================ */
+
+.retention__section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2933;
+  margin: 0 0 16px;
+}
+
+/* ============================================
+   CLIENTES INACTIVOS
+   ============================================ */
+
+.retention__inactive {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.retention__inactive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.retention__inactive-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px;
+  gap: 16px;
+}
+
+.retention__inactive-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.retention__inactive-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2933;
+}
+
+.retention__inactive-days {
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.retention__inactive-button {
+  padding: 10px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.retention__inactive-button:hover {
+  background: #d97706;
+}
+
+/* ============================================
+   DISTRIBUCIÓN POR ORIGEN
+   ============================================ */
+
+.retention__origin {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.retention__origin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.retention__origin-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.retention__origin-card:hover {
+  background: white;
+  border-color: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.retention__origin-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.retention__origin-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.retention__origin-card-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2933;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.retention__origin-card-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.retention__origin-card-count {
+  font-size: 13px;
+  color: #52606d;
+}
+
+.retention__origin-card-percent {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2933;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .retention {
+    padding: 16px;
+  }
+
+  .retention__title {
+    font-size: 26px;
+  }
+
+  .retention__kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .retention__analysis {
+    padding: 20px;
+  }
+
+  .retention__kpi-card {
+    padding: 20px;
+  }
+
+  .retention__kpi-value {
+    font-size: 32px;
+  }
+
+  .retention__origin-grid {
+  grid-template-columns: 1fr;
+}
+
+.retention__origin-card {
+  padding: 16px;
+}
+
+.retention__origin-card-icon {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+}
+}
+
+@media (max-width: 480px) {
+  .retention__title {
+    font-size: 24px;
+  }
+
+  .retention__analysis-message {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  .retention__kpi-icon {
+    font-size: 32px;
+  }
+
+  .retention__kpi-value {
+    font-size: 28px;
+  }
+}
