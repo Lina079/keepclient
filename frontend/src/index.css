@@ -6,6 +6,7 @@
 @import url("./blocks/weather-widget.css");
 @import url("./blocks/clients.css");
 @import url("./blocks/client-modal.css");
+@import url("./blocks/toast.css");
 
 /* Reset mínimo y consistente */
 *,

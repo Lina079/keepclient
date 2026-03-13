@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useLanguage } from "../../app/i18n/LanguageContext";
 import { useAuth } from "../../app/auth/AuthContext";
 import ClientModal from "../../components/ClientModal/ClientModal";
+import { useToast } from "../../app/toast/ToastContext";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 
 export default function Clients() {
   const { lang } = useLanguage();
-  const { user } = useAuth();
+  const {} = useAuth();
+  const { toast } = useToast();
 
 // funciones de validación
 const validatePhone = (value) => {
@@ -195,13 +197,15 @@ if (visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0) {
   console.log("✅Tarea creada:", tarea);
 }
 // 3. Mostrar mensaje de éxito
-alert(lang === "es"
-  ? `✅ Visita registrada correctament\n${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0 
-   ? `📋 Tarea creada para dentro de ${visitData.seguimientoDias} días` 
-   : ''}`
-  : `✅ Visit registered successfully\n${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0 
-   ? `📋 Task created for ${visitData.seguimientoDias} days from now` 
-   : ''}`);
+toast.success(
+    lang === "es"
+      ? `Visita registrada correctamente${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0
+          ? `. Tarea creada para dentro de ${visitData.seguimientoDias} días`
+          : ''}`
+      : `Visit registered successfully${visitData.seguimientoDias && parseInt(visitData.seguimientoDias) > 0
+          ? `. Task created for ${visitData.seguimientoDias} days from now`
+          : ''}`
+  );
 
    // 4. Cerrar el modal
    handleCloseModal();
@@ -234,49 +238,32 @@ const handleDeleteClient = (clientId) => {
   const handleSubmitFirstVisit = () => {
     // Validar campos obligatorios
     if (!formData.nombre.trim()) {
-      alert(lang === "es"
-        ? "⚠️ El nombre del cliente es obligatorio."
-        : "⚠️ Client name is required."
-      );
-      return;
+      toast.error(lang === "es" ? "El nombre del cliente es obligatorio" : "Client name is required");
+    return;
     }
     if (!formData.telefono.trim()) {
-      alert(lang === "es"
-        ? "⚠️ El teléfono del cliente es obligatorio."
-        : "⚠️ Client phone number is required."
-      );
-      return; 
+      toast.error(lang === "es" ? "El teléfono del cliente es obligatorio" : "Client phone number is required");
+      return;
     }
 
     //Validar formato de teléfono (mínimo 9 dígitos)
     const phoneDigits = formData.telefono.replace(/\D/g, '');
     if (phoneDigits.length < 9) {
-      alert(lang === "es"
-        ? "⚠️ El teléfono debe contener al menos 9 dígitos."
-        : "⚠️ Phone number must contain at least 9 digits."
-      );
+      toast.error(lang === "es" ? "El teléfono debe contener al menos 9 dígitos" : "Phone number must contain at least 9 digits");
       return;
     }
+    
     // Validar formato de email (si se ingresó)
     if (formData.email && !validateEmail(formData.email)) {
-      alert(lang === "es"
-        ? "⚠️ El formato del email es inválido."
-        : "⚠️ Invalid email format."
-      );
+      toast.error(lang === "es" ? "El formato del email es inválido" : "Invalid email format");
       return;
      }
      if (!formData.servicio.trim()) {
-      alert(lang === "es"
-        ? "⚠️ El servicio realizado es obligatorio."
-        : "⚠️ Service performed is required."
-      );
+      toast.error(lang === "es" ? "El servicio realizado es obligatorio" : "Service performed is required");
       return;
      }
      if (!formData.atendidoPor) {
-      alert(lang === "es"
-        ? "⚠️ Debes seleccionar quién atendió al cliente."
-        : "⚠️ You must select who attended the client."
-      );
+      toast.error(lang === "es" ? "Debes seleccionar quién atendió al cliente" : "You must select who attended the client");
       return;
      }
 
@@ -323,15 +310,15 @@ const handleDeleteClient = (clientId) => {
       console.log("✅Tarea creada:", tarea);
      }
 
-     // Mostrar mensaje de éxito
-     alert(lang === "es"
-      ? `✅ Cliente registrado correctamente\n${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0 
-        ? `📋 Tarea creada para dentro de ${formData.seguimientoDias} días` 
+    toast.success(
+      lang === "es"
+      ? `Cliente registrado correctamente${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0
+        ? `. Tarea creada para dentro de ${formData.seguimientoDias} días`
         : ''}`
-      : `✅ Client registered successfully\n${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0 
-        ? `📋 Task created for ${formData.seguimientoDias} days from now` 
+        : `Client registered successfully${formData.seguimientoDias && parseInt(formData.seguimientoDias) > 0
+        ? `. Task created for ${formData.seguimientoDias} days from now`
         : ''}`
-     );
+      );
 
       // Resetear formulario
       setFormData({
