@@ -1,0 +1,257 @@
+/* ============================================
+   SETTINGS - Página de configuración
+   ============================================ */
+
+.settings {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.settings__header {
+  margin-bottom: 32px;
+}
+
+.settings__title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2933;
+  margin: 0;
+}
+
+/* CONTENT */
+.settings__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ============================================
+   SECCIONES
+   ============================================ */
+
+.settings__section {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.settings__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.settings__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2933;
+  margin: 0;
+}
+
+.settings__edit-button {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  color: #52606d;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.settings__edit-button:hover {
+  background: #e5e7eb;
+  color: #1f2933;
+}
+
+.settings__section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============================================
+   CAMPOS
+   ============================================ */
+
+.settings__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #52606d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings__value {
+  font-size: 16px;
+  color: #1f2933;
+  margin: 0;
+  padding: 12px 0;
+}
+
+.settings__value--muted {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.settings__input,
+.settings__select {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1f2933;
+  background: white;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.settings__input:focus,
+.settings__select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.settings__input::placeholder {
+  color: #9ca3af;
+}
+
+.settings__select {
+  cursor: pointer;
+  max-width: 300px;
+  width: 100%;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+
+.settings__badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings__badge--free {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.settings__badge--pro {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.settings__badge--enterprise {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* ============================================
+   BOTONES DE ACCIÓN
+   ============================================ */
+
+.settings__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.settings__button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.settings__button--primary {
+  background: #4a90e2;
+  color: white;
+}
+
+.settings__button--primary:hover {
+  background: #357abd;
+}
+
+.settings__button--secondary {
+  background: #f3f4f6;
+  color: #52606d;
+}
+
+.settings__button--secondary:hover {
+  background: #e5e7eb;
+  color: #1f2933;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .settings {
+    padding: 16px;
+  }
+
+  .settings__title {
+    font-size: 26px;
+  }
+
+  .settings__section {
+    padding: 20px;
+  }
+
+  .settings__section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .settings__edit-button {
+    width: 100%;
+  }
+
+  .settings__actions {
+    flex-direction: column;
+  }
+
+  .settings__button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings__title {
+    font-size: 24px;
+  }
+
+  .settings__section-title {
+    font-size: 18px;
+  }
+
+  .settings__section {
+    padding: 16px;
+  }
+}
